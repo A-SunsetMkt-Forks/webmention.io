@@ -23,6 +23,7 @@ class Formats
         end
         if !link.author_photo.blank?
           obj[:data][:author][:photo] = AbsoluteUri::AbsoluteUri.new(link.author_photo, base: link.href).absolutize
+          obj[:data][:author][:photo] = obj[:data][:author][:photo].gsub 'https://webmention.io/avatar/', 'https://avatars.webmention.io/'
         else
           obj[:data][:author][:photo] = nil
         end
@@ -91,6 +92,8 @@ class Formats
     end
 
     received = link.created_at.to_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+    
+    link.author_photo = link.author_photo.gsub 'https://webmention.io/avatar/', 'https://avatars.webmention.io/'
 
     jf2 = {
       type: "entry",
